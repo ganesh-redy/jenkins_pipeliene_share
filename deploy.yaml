@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: naruto
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      containers:
+        - name: app1                  
+          image: ganesh6498/sam:987
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ser1
+  namespace: default
+spec:
+  selector:
+    app: app1
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+

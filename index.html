@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naruto Enhanced Animation</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #0f0f0f, #1c1c1c);
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-top: 30px;
+      text-shadow: 2px 2px 10px #0af;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 40px;
+    }
+
+    .card {
+      position: relative;
+      background: #111;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      width: 300px;
+      height: 400px;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+    }
+
+    .card img.character {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: float 4s ease-in-out infinite;
+      transition: filter 0.3s, opacity 0.3s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0); }
+    }
+
+    .name {
+      position: absolute;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      width: 100%;
+      padding: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-top: 2px solid #0af;
+      z-index: 3;
+    }
+
+    .effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 2;
+    }
+
+    .card:hover .effect {
+      opacity: 1;
+    }
+
+    /* Rasengan Effect */
+    .rasengan::before {
+      content: '';
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 255, 255, 1), transparent 60%);
+      animation: pulse 1.2s infinite ease-in-out;
+      box-shadow: 0 0 30px #0ff, 0 0 50px #0ff;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    /* Kakashi Lightning */
+    .chidori img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 15px #00f);
+    }
+
+    .card.kakashi:hover img.character {
+      filter: blur(3px) brightness(0.7);
+    }
+
+    /* Sasuke Sharingan */
+    .card.sasuke:hover img.character {
+      opacity: 0.3;
+    }
+
+    .sharingan-wrapper {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 0, 0, 0.3), transparent 70%);
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: glow 2s infinite;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 10px red; }
+      50% { box-shadow: 0 0 25px red; }
+      100% { box-shadow: 0 0 10px red; }
+    }
+
+    .sharingan-wrapper img {
+      width: 110px;
+      height: 110px;
+      border-radius: 60%;
+      image-orientation:from-image ;
+      animation: spin 4s linear infinite;
+      filter: drop-shadow(0 0 10px red);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Naruto Characters Animation</h1>
+  <div class="container">
+
+    <!-- Naruto (Rasengan) -->
+    <div class="card naruto">
+      <img class="character" src="https://images.saymedia-content.com/.image/t_share/MTc1MTE0MDc4ODMyODk1MDcx/best-characters-in-naruto.jpg" alt="Naruto" />
+      <div class="effect rasengan"></div>
+      <div class="name">Naruto (Rasengan)</div>
+    </div>
+
+    <!-- Kakashi (Chidori) -->
+    <div class="card kakashi">
+      <img class="character" src="https://i.pinimg.com/736x/7c/44/47/7c44479431af5eebf54362ea75a9f77e.jpg" alt="Kakashi" />
+      <div class="effect chidori">
+        <img src="https://i.pinimg.com/474x/e0/e3/f2/e0e3f29dbfdb8417f81a50d9ea8cc289.jpg" alt="Chidori Effect" />
+      </div>
+      <div class="name">Kakashi (Chidori)</div>
+    </div>
+
+    <!-- Sasuke (Sharingan) -->
+    <div class="card sasuke">
+      <img class="character" src="https://static1.cbrimages.com/wordpress/wp-content/uploads/2023/03/sasuke-chidori-blade.jpeg" alt="Sasuke" />
+      <div class="effect sharingan">
+        <div class="sharingan-wrapper">
+          <img src="https://i.pinimg.com/originals/97/f4/2c/97f42c2c17480566c56c7004d56f9a44.gif" alt="Sharingan" />
+        </div>
+      </div>
+      <div class="name">Sasuke (Sharingan)</div>
+    </div>
+
+  </div>
+</body>
+</html>
+
