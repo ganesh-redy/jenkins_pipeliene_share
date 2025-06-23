@@ -1,58 +1,52 @@
 @Library('share-1@main') _
 pipeline {
     agent any
+
     environment {
         IMAGE_NAME = "narutoweb"
         DOCKER = "ganesh6498"
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp')
-        CLUSTER_NAME= "cluster-1"
-        ZONE= "us-central1-c"
-        PROJECT= "original-folio-456209-i6"
+        CLUSTER_NAME = "cluster-1"
+        ZONE = "us-central1-c"
+        PROJECT = "original-folio-456209-i6"
     }
-    stages {
-        stage("share_libriary"){
-            script{
-                name=${DOCKER}
-                image=${IMAGE_NAME}
-                
-                sharepipe.groovy(name, image)
 
+    stages {
+        stage("share_library") {
+            steps {
+                script {
+                    def name = DOCKER
+                    def image = IMAGE_NAME
+                    sharepipe.groovy(name, image)
+                }
             }
         }
-        stage (" kubernets deploy"){
-            steps{
-                sh """ 
-                   gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT}
 
+        stage("kubernetes deploy") {
+            steps {
+                sh """
+                    gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT}
                 """
             }
-
         }
-        stage ("change the image deploy file"){
-            sh ''' 
-                sed -i 's|image: .*|image:${DOCKER}/${IMAGE_NAME}:${BUILD_NUMBER}|' deploy.yaml
-                cat deploy.yam | grep image:
-            '''
-        }
-       stage ("deploy the application"){
-        steps{
-            sh """
-             kubectl apply -f .
-             sleep 40
-             kubectl get svc 
-            
-            """
-        }
-       }
-  
-      
- 
-     
-       
 
-     
+        stage("change the image in deploy file") {
+            steps {
+                sh """
+                    sed -i 's|image: .*|image: ${DOCKER}/${IMAGE_NAME}:${BUILD_NUMBER}|' deploy.yaml
+                    cat deploy.yaml | grep image:
+                """
+            }
+        }
 
-       
+        stage("deploy the application") {
+            steps {
+                sh """
+                    kubectl apply -f .
+                    sleep 40
+                    kubectl get svc
+                """
+            }
+        }
     }
 }
-
