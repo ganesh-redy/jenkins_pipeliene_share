@@ -31,14 +31,14 @@ pipeline {
             }
         }
 
-        stage("Update Image in Deploy File") {
-            steps {
-                sh '''
-                    sed -i "s|image: .*|image:'''${DOCKER}/${IMAGE_NAME}:${BUILD_NUMBER}''|" deploy.yaml
-                    grep image: deploy.yaml
-                '''
-            }
-        }
+     stage("Update Image in Deployment YAML") {
+    steps {
+        sh """
+            sed -i "s|image: .*|image: ${DOCKER}/${IMAGE_NAME}:${BUILD_NUMBER}|" deploy.yaml
+            grep 'image:' deploy.yaml
+        """
+    }
+}
 
         stage("Deploy to Kubernetes") {
             steps {
