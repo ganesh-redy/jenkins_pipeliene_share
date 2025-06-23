@@ -1,4 +1,4 @@
-@Library('share-1') _
+@Library('share-1@main') _
 pipeline {
     agent any
     environment {
