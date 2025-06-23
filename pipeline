@@ -1,4 +1,5 @@
 @Library('share-1@main') _
+
 pipeline {
     agent any
 
@@ -12,37 +13,37 @@ pipeline {
     }
 
     stages {
-        stage("share_library") {
+        stage("Use Shared Library") {
             steps {
                 script {
-                    def name = DOCKER
-                    def image = IMAGE_NAME
-                    sharepipe.groovy(name, image)
+                    // ✅ Correct way to call shared library method
+                    sharepipe(DOCKER, IMAGE_NAME)
                 }
             }
         }
 
-        stage("kubernetes deploy") {
+        stage("Connect to GKE Cluster") {
             steps {
                 sh """
+                    gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
                     gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT}
                 """
             }
         }
 
-        stage("change the image in deploy file") {
+        stage("Update Image in Deploy File") {
             steps {
-                sh """
-                    sed -i 's|image: .*|image: ${DOCKER}/${IMAGE_NAME}:${BUILD_NUMBER}|' deploy.yaml
-                    cat deploy.yaml | grep image:
-                """
+                sh '''
+                    sed -i "s|image: .*|image:'''${DOCKER}/${IMAGE_NAME}:${BUILD_NUMBER}''|" deploy.yaml
+                    grep image: deploy.yaml
+                '''
             }
         }
 
-        stage("deploy the application") {
+        stage("Deploy to Kubernetes") {
             steps {
                 sh """
-                    kubectl apply -f .
+                    kubectl apply -f deploy.yaml
                     sleep 40
                     kubectl get svc
                 """
